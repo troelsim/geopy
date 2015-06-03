@@ -9,6 +9,25 @@ __all__ = ('Dawa',)
 
 
 class Dawa(Geocoder):
+    """
+    Geocoder using the Dawa (Denmark's Addresses Web API / Danmarks Adressers Web API).
+    Documentation at https://dawa.aws.dk
+    Currently tested on cPython 2.7.6
+    Tends to fail when using the (default) 'https' scheme, so use by.
+
+    Usage:
+
+        >>> from geopy.geocoders import Dawa
+        >>> geocoder = Dawa(scheme='http')
+        >>> geocoder.geocode("Harald Jensens Plads")
+        Location((56.1440727139, 10.1901302108, 0.0))
+        >>> geocoder.geocode("Banegaardspladsen, Aarhus", exactly_one=False)
+       [Location((56.1503632165, 10.2046199686, 0.0)),
+       Location((56.1501799711, 10.2038763154, 0.0)),
+       Location((56.1501588186, 10.2037417209, 0.0)),
+       Location((56.1501420977, 10.2036133823, 0.0)),
+       ...]
+    """
     def __init__(
             self,
             scheme=DEFAULT_SCHEME,

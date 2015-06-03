@@ -19,26 +19,53 @@ class Dawa(Geocoder):
         super(Dawa, self).__init__(scheme=scheme, timeout=timeout, proxies=proxies)
         self.domain = domain
         self.api = '%s://%s/adresser' % (self.scheme, self.domain)
+        self.reverse_api = '%s://%s/adgangsadresser/reverse' % (self.scheme, self.domain)
+
+    def _parse_place(self, place):
+        location = place.get('adressebetegnelse')
+        if not location:  # This is not an address, try parsing it as an access address
+            return self._parse_access_address(place)
+        coordinates = place['adgangsadresse']['adgangspunkt']['koordinater']
+        latitude = coordinates[1]
+        longitude = coordinates[0]
+        return Location(location, (latitude, longitude), place)
+
+    def _parse_access_address(self, access_address):
+        location = self._format_address(
+            access_address['vejstykke']['navn'],
+            access_address['husnr'],
+            access_address['postnummer']['nr'],
+            access_address['postnummer']['navn']
+        )
+        coordinates = access_address['adgangspunkt']['koordinater']
+        latitude = coordinates[1]
+        longitude = coordinates[0]
+        return Location(location, (latitude, longitude), access_address)
+
+    def _format_address(self, street, number, zip, city):
+        return "%s %s, %s %s" % (street, number, zip, city)
 
     def _parse_json(self, page, exactly_one):
         results = page
         if not results:
             return
-
-        def parse_place(place):
-            location = place.get('adressebetegnelse')
-            coordinates = place['adgangsadresse']['adgangspunkt']['koordinater']
-            latitude = coordinates[1]
-            longitude = coordinates[0]
-            return Location(location, (latitude, longitude), place)
+        if not isinstance(results, list):
+            results = [results]
 
         if exactly_one:
-            return parse_place(results[0])
+            return self._parse_place(results[0])
         else:
-            return [parse_place(result) for result in results]
+            return [self._parse_place(result) for result in results]
 
     def reverse(self, query, exactly_one=True, timeout=None):
-        pass
+        params = {
+            'x': query.longitude,
+            'y': query.latitude
+        }
+        url = "?".join((self.reverse_api, urlencode(params)))
+        return self._parse_json(
+            self._call_geocoder(url, timeout=timeout), exactly_one
+        )
 
     def geocode(self, query, exactly_one=True, timeout=None):
         params = {
@@ -46,5 +73,5 @@ class Dawa(Geocoder):
         }
         url = "?".join((self.api, urlencode(params)))
         return self._parse_json(
-            self._call_geocoder(url), exactly_one
+            self._call_geocoder(url, timeout=timeout), exactly_one
         )

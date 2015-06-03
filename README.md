@@ -13,7 +13,7 @@ geopy includes geocoder classes for the [OpenStreetMap Nominatim][osm],
 [Baidu Maps][baidu], [Bing Maps API][bing], [Yahoo! PlaceFinder][placefinder],
 [Yandex][yandex], [IGN France][ignfrance], [GeoNames][geonames],
 [NaviData][navidata], [OpenMapQuest][openmapquest], [What3Words][what3words],
-[OpenCage][opencage], [SmartyStreets][smartystreets], [geocoder.us][dot_us],
+[OpenCage][opencage], [SmartyStreets][smartystreets], [DAWA][dawa], [geocoder.us][dot_us],
 and [GeocodeFarm][geocodefarm] geocoder services.
 The various geocoder classes are located in [geopy.geocoders][geocoders_src].
 
@@ -32,6 +32,7 @@ The various geocoder classes are located in [geopy.geocoders][geocoders_src].
 [osm]: https://wiki.openstreetmap.org/wiki/Nominatim
 [placefinder]: https://developer.yahoo.com/boss/geo/docs/
 [smartystreets]: https://smartystreets.com/products/liveaddress-api
+[dawa]: https://dawa.aws.dk/
 [what3words]: http://what3words.com/api/reference
 [yandex]: http://api.yandex.com/maps/doc/intro/concepts/intro.xml
 [geocoders_src]: https://github.com/geopy/geopy/tree/master/geopy/geocoders

@@ -11,22 +11,8 @@ __all__ = ('Dawa',)
 class Dawa(Geocoder):
     """
     Geocoder using the Dawa (Denmark's Addresses Web API / Danmarks Adressers Web API).
-    Documentation at https://dawa.aws.dk
-    Currently tested on cPython 2.7.6
-    Tends to fail when using the (default) 'https' scheme, so use by.
-
-    Usage:
-
-        >>> from geopy.geocoders import Dawa
-        >>> geocoder = Dawa(scheme='http')
-        >>> geocoder.geocode("Harald Jensens Plads")
-        Location((56.1440727139, 10.1901302108, 0.0))
-        >>> geocoder.geocode("Banegaardspladsen, Aarhus", exactly_one=False)
-       [Location((56.1503632165, 10.2046199686, 0.0)),
-       Location((56.1501799711, 10.2038763154, 0.0)),
-       Location((56.1501588186, 10.2037417209, 0.0)),
-       Location((56.1501420977, 10.2036133823, 0.0)),
-       ...]
+    API Documentation at https://dawa.aws.dk.
+    Might fail when using the (default) 'https' scheme, in that case, initialize using `Dawa(scheme='http')`
     """
     def __init__(
             self,
@@ -77,6 +63,19 @@ class Dawa(Geocoder):
             return [self._parse_place(result) for result in results]
 
     def reverse(self, query, exactly_one=True, timeout=None):
+        """
+        Geocode a location query.
+
+        :param string query: The address or query you wish to geocode.
+
+        :param bool exactly_one: Return one result or a list of results, if
+            available.
+
+        :param int timeout: Time, in seconds, to wait for the geocoding service
+            to respond before raising a :class:`geopy.exc.GeocoderTimedOut`
+            exception. Set this only if you wish to override, on this call
+            only, the value set during the geocoder's initialization.
+        """
         params = {
             'x': query.longitude,
             'y': query.latitude
@@ -87,6 +86,36 @@ class Dawa(Geocoder):
         )
 
     def geocode(self, query, exactly_one=True, timeout=None):
+        """
+        Geocode a location query.
+
+        :param string query: The address or query you wish to geocode.
+
+        :param bool exactly_one: Return one result or a list of results, if
+            available.
+
+        :param int timeout: Time, in seconds, to wait for the geocoding service
+            to respond before raising a :class:`geopy.exc.GeocoderTimedOut`
+            exception. Set this only if you wish to override, on this call
+            only, the value set during the geocoder's initialization.
+        """
+        """
+        Returns a reverse geocoded location.
+
+        :param query: The coordinates for which you wish to obtain the
+            closest human-readable addresses.
+        :type query: :class:`geopy.point.Point`, list or tuple of (latitude,
+            longitude), or string as "%(latitude)s, %(longitude)s"
+
+        :param bool exactly_one: Return one result or a list of results, if
+            available. GeocodeFarm's API will always return at most one
+            result.
+
+        :param int timeout: Time, in seconds, to wait for the geocoding service
+            to respond before raising a :class:`geopy.exc.GeocoderTimedOut`
+            exception. Set this only if you wish to override, on this call
+            only, the value set during the geocoder's initialization.
+        """
         params = {
             'q': self.format_string % query
         }

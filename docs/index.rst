@@ -24,6 +24,9 @@ Geocoders
 .. autoclass:: geopy.geocoders.DataBC
     :members: __init__, geocode
 
+.. autoclass:: geopy.geocoders.Dawa
+    :members: __init__, geocode, reverse
+
 .. autoclass:: geopy.geocoders.GeocodeFarm
     :members: __init__, geocode, reverse
 
